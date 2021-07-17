@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = void 0;
 const vscode = require("vscode");
 const config_1 = require("./config");
-const search_1 = require("./utils/search");
+const fetchCodeCompletion_1 = require("./utils/fetchCodeCompletion");
 function activate(context) {
     const disposable = vscode.commands.registerCommand('extension.copilot-clone-settings', () => {
         vscode.window.showInformationMessage('Show settings');
@@ -20,11 +20,17 @@ function activate(context) {
     context.subscriptions.push(disposable);
     const provider = {
         provideInlineCompletionItems: (document, position, context, token) => __awaiter(this, void 0, void 0, function* () {
-            const textBeforeCursor = document.getText(new vscode.Range(position.with(undefined, 0), position));
-            if (textBeforeCursor.indexOf(config_1.default.SEARCH_PHARSE_START) == 0 && textBeforeCursor[textBeforeCursor.length - 1] === config_1.default.SEARCH_PHARSE_END) {
+            const textBeforeCursor = document.getText();
+            if (textBeforeCursor.trim() === "") {
+                return { items: [] };
+            }
+            const currLineBeforeCursor = document.getText(new vscode.Range(position.with(undefined, 0), position));
+            // Check if user's state meets one of the trigger criteria
+            if (config_1.default.SEARCH_PHARSE_END.includes(textBeforeCursor[textBeforeCursor.length - 1]) || currLineBeforeCursor.trim() === "") {
                 let rs;
                 try {
-                    rs = yield search_1.search(textBeforeCursor);
+                    // Fetch the code completion based on the text in the user's document
+                    rs = yield fetchCodeCompletion_1.fetchCodeCompletionText(textBeforeCursor);
                 }
                 catch (err) {
                     vscode.window.showErrorMessage(err.toString());
@@ -33,14 +39,12 @@ function activate(context) {
                 if (rs == null) {
                     return { items: [] };
                 }
+                // Add the generated code to the inline suggestion list
                 const items = new Array();
-                rs.results.forEach((item, i) => {
-                    const output = `\n// Source: https://stackoverflow.com${item.sourceURL}\n${item.code}`;
-                    items.push({
-                        text: output,
-                        range: new vscode.Range(position.translate(0, output.length), position),
-                        trackingId: `snippet-${i}`,
-                    });
+                items.push({
+                    text: rs.textContent,
+                    range: new vscode.Range(position.translate(0, rs.textContent.length), position),
+                    trackingId: `snippet-0`,
                 });
                 return { items };
             }

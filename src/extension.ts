@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import CSConfig from './config';
-import { search } from './utils/search';
+import { fetchCodeCompletionText } from './utils/fetchCodeCompletion';
 
 export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand(
@@ -18,16 +18,21 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const provider: vscode.InlineCompletionItemProvider<CustomInlineCompletionItem> = {
 		provideInlineCompletionItems: async (document, position, context, token) => {
-			const textBeforeCursor = document.getText(
+			const textBeforeCursor = document.getText()
+			if (textBeforeCursor.trim() === "") {
+				return { items: [] };
+			}
+			const currLineBeforeCursor = document.getText(
 				new vscode.Range(position.with(undefined, 0), position)
 			);
 
-			if (textBeforeCursor.indexOf(CSConfig.SEARCH_PHARSE_START) == 0 && textBeforeCursor[textBeforeCursor.length - 1] === CSConfig.SEARCH_PHARSE_END) {
-
+			// Check if user's state meets one of the trigger criteria
+			if (CSConfig.SEARCH_PHARSE_END.includes(textBeforeCursor[textBeforeCursor.length - 1]) || currLineBeforeCursor.trim() === "") {
 				let rs;
 
 				try {
-					rs = await search(textBeforeCursor);
+					// Fetch the code completion based on the text in the user's document
+					rs = await fetchCodeCompletionText(textBeforeCursor);
 				} catch (err) {
 					vscode.window.showErrorMessage(err.toString());
 					return { items:[] };
@@ -38,16 +43,12 @@ export function activate(context: vscode.ExtensionContext) {
 					return { items: [] };
 				}
 
+				// Add the generated code to the inline suggestion list
 				const items = new Array<CustomInlineCompletionItem>();
-
-				rs.results.forEach((item, i) => {
-
-					const output = `\n// Source: https://stackoverflow.com${item.sourceURL}\n${item.code}`;
-					items.push({
-						text: output,
-						range: new vscode.Range(position.translate(0, output.length), position),
-						trackingId: `snippet-${i}`,
-					});
+				items.push({
+					text: rs.textContent,
+					range: new vscode.Range(position.translate(0, rs.textContent.length), position),
+					trackingId: `snippet-0`,
 				});
 				return { items };
 			}
