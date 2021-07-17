@@ -31,6 +31,17 @@
 					"command": "extension.code-clippy-settings"
 				}
 			]
+		},
+		"configuration": {
+			"title": "Code Clippy Configuration",
+			"properties": {
+				"conf.resource.hfAPIKey": {
+					"type": "string",
+					"default": "<API_KEY>",
+					"description": "API key for using Huggingface's Inference API: https://api-inference.huggingface.co/docs/node/html/quicktour.html",
+					"scope": "resource"
+				}
+			}
 		}
 	},
 	"scripts": {

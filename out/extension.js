@@ -20,17 +20,21 @@ function activate(context) {
     context.subscriptions.push(disposable);
     const provider = {
         provideInlineCompletionItems: (document, position, context, token) => __awaiter(this, void 0, void 0, function* () {
+            const configuration = vscode.workspace.getConfiguration('', document.uri);
+            const API_KEY = configuration.get("conf.resource.hfAPIKey", "");
+            console.log("API_KEY: " + API_KEY);
             const textBeforeCursor = document.getText();
             if (textBeforeCursor.trim() === "") {
                 return { items: [] };
             }
             const currLineBeforeCursor = document.getText(new vscode.Range(position.with(undefined, 0), position));
+            // console.log("prompt " + textBeforeCursor)
             // Check if user's state meets one of the trigger criteria
             if (config_1.default.SEARCH_PHARSE_END.includes(textBeforeCursor[textBeforeCursor.length - 1]) || currLineBeforeCursor.trim() === "") {
                 let rs;
                 try {
                     // Fetch the code completion based on the text in the user's document
-                    rs = yield fetchCodeCompletion_1.fetchCodeCompletionText(textBeforeCursor);
+                    rs = yield fetchCodeCompletion_1.fetchCodeCompletionText(textBeforeCursor, API_KEY);
                 }
                 catch (err) {
                     vscode.window.showErrorMessage(err.toString());
