@@ -12,7 +12,10 @@ function fetchCodeCompletionText(prompt, API_KEY) {
         return node_fetch_1.default(API_URL, {
             method: "post",
             body: JSON.stringify({
-                "inputs": prompt, "parameters": { "max_new_tokens": 16, "return_full_text": false }
+                "inputs": prompt, "parameters": {
+                    "max_new_tokens": 16, "return_full_text": false,
+                    "max_time": 3.0
+                }
             }),
             headers: headers
         })

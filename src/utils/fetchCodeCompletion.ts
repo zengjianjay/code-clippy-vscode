@@ -17,7 +17,10 @@ export function fetchCodeCompletionText(prompt: string, API_KEY: string): Promis
         return fetch(API_URL, {
             method: "post",
             body: JSON.stringify({
-                "inputs": prompt, "parameters": {"max_new_tokens": 16, "return_full_text": false}
+                "inputs": prompt, "parameters": {
+                    "max_new_tokens": 16, "return_full_text": false,
+                    "max_time": 3.0
+                }
             }),
             headers: headers
         })

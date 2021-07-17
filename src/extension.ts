@@ -18,9 +18,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const provider: vscode.InlineCompletionItemProvider<CustomInlineCompletionItem> = {
 		provideInlineCompletionItems: async (document, position, context, token) => {
+			// Grab the api key from the extension's config
 			const configuration = vscode.workspace.getConfiguration('', document.uri);
 			const API_KEY = configuration.get("conf.resource.hfAPIKey", "");
-			console.log("API_KEY: " + API_KEY)
 
 			const textBeforeCursor = document.getText()
 			if (textBeforeCursor.trim() === "") {
@@ -29,7 +29,6 @@ export function activate(context: vscode.ExtensionContext) {
 			const currLineBeforeCursor = document.getText(
 				new vscode.Range(position.with(undefined, 0), position)
 			);
-			// console.log("prompt " + textBeforeCursor)
 
 			// Check if user's state meets one of the trigger criteria
 			if (CSConfig.SEARCH_PHARSE_END.includes(textBeforeCursor[textBeforeCursor.length - 1]) || currLineBeforeCursor.trim() === "") {
