@@ -35,6 +35,12 @@
 		"configuration": {
 			"title": "Code Clippy Configuration",
 			"properties": {
+				"conf.resource.hfModelName": {
+					"type": "string",
+					"default": "flax-community/gpt-neo-125M-code-clippy-dedup-filtered-no-resize-2048bs",
+					"description": "Model name that will be used to generate the completions.",
+					"scope": "resource"
+				},
 				"conf.resource.hfAPIKey": {
 					"type": "string",
 					"default": "<API_KEY>",

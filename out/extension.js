@@ -22,8 +22,9 @@ function activate(context) {
         provideInlineCompletionItems: (document, position, context, token) => __awaiter(this, void 0, void 0, function* () {
             // Grab the api key from the extension's config
             const configuration = vscode.workspace.getConfiguration('', document.uri);
+            const MODEL_NAME = configuration.get("conf.resource.hfModelName", "");
             const API_KEY = configuration.get("conf.resource.hfAPIKey", "");
-            const USE_GPU = configuration.get("conf.resource.useGPU", "");
+            const USE_GPU = configuration.get("conf.resource.useGPU", false);
             const textBeforeCursor = document.getText();
             if (textBeforeCursor.trim() === "") {
                 return { items: [] };
@@ -34,9 +35,13 @@ function activate(context) {
                 let rs;
                 try {
                     // Fetch the code completion based on the text in the user's document
-                    rs = yield fetchCodeCompletions_1.fetchCodeCompletionTexts(textBeforeCursor, API_KEY, USE_GPU);
+                    rs = yield fetchCodeCompletions_1.fetchCodeCompletionTexts(textBeforeCursor, MODEL_NAME, API_KEY, USE_GPU);
                 }
                 catch (err) {
+                    // Check if it is an issue with API token and if so prompt user to enter a correct one
+                    if (err.toString() === "Error: Bearer token is invalid" || err.toString() === "Error: Authorization header is invalid, use 'Bearer API_TOKEN'") {
+                        vscode.window.showInputBox({ "prompt": "Please enter your HF API key in order to use Code Clippy", "password": true }).then(apiKey => configuration.update("conf.resource.hfAPIKey", apiKey));
+                    }
                     vscode.window.showErrorMessage(err.toString());
                     return { items: [] };
                 }
