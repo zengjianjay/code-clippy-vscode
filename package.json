@@ -40,6 +40,12 @@
 					"default": "<API_KEY>",
 					"description": "API key for using Huggingface's Inference API: https://api-inference.huggingface.co/docs/node/html/quicktour.html",
 					"scope": "resource"
+				},
+				"conf.resource.useGPU": {
+					"type": "boolean",
+					"default": false,
+					"description": "Whether to use GPU for faster completions. Must have Startup plan at a minimum.",
+					"scope": "resource"
 				}
 			}
 		}

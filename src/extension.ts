@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import CSConfig from './config';
-import { fetchCodeCompletionText } from './utils/fetchCodeCompletion';
+import { fetchCodeCompletionTexts } from './utils/fetchCodeCompletions';
 
 export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand(
@@ -21,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 			// Grab the api key from the extension's config
 			const configuration = vscode.workspace.getConfiguration('', document.uri);
 			const API_KEY = configuration.get("conf.resource.hfAPIKey", "");
+			const USE_GPU = configuration.get("conf.resource.useGPU", "");
 
 			const textBeforeCursor = document.getText()
 			if (textBeforeCursor.trim() === "") {
@@ -36,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 				try {
 					// Fetch the code completion based on the text in the user's document
-					rs = await fetchCodeCompletionText(textBeforeCursor, API_KEY);
+					rs = await fetchCodeCompletionTexts(textBeforeCursor, API_KEY, USE_GPU);
 				} catch (err) {
 					vscode.window.showErrorMessage(err.toString());
 					return { items:[] };
@@ -49,11 +50,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 				// Add the generated code to the inline suggestion list
 				const items = new Array<CustomInlineCompletionItem>();
-				items.push({
-					text: rs.textContent,
-					range: new vscode.Range(position.translate(0, rs.textContent.length), position),
-					trackingId: `snippet-0`,
-				});
+				for (let i=0; i < rs.completions.length; i++) {
+					items.push({
+						text: rs.completions[i],
+						range: new vscode.Range(position.translate(0, rs.completions.length), position),
+						trackingId: `snippet-${i}`,
+					});
+				}
 				return { items };
 			}
 			return { items: [] };

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchCodeCompletionText = void 0;
+exports.fetchCodeCompletionTexts = void 0;
 const node_fetch_1 = require("node-fetch");
-const API_URL = "https://api-inference.huggingface.co/models/flax-community/gpt-neo-125M-code-clippy-dedup-2048";
-function fetchCodeCompletionText(prompt, API_KEY) {
+const API_URL = "https://api-inference.huggingface.co/models/flax-community/gpt-neo-125M-code-clippy-dedup-filtered-no-resize-2048bs";
+function fetchCodeCompletionTexts(prompt, API_KEY, USE_GPU) {
     // Setup header with API key
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const headers = { "Authorization": `Bearer ${API_KEY}` };
@@ -16,7 +16,7 @@ function fetchCodeCompletionText(prompt, API_KEY) {
                     "max_new_tokens": 16, "return_full_text": false,
                     "do_sample": true, "temperature": 0.8,
                     "max_time": 5.0, "num_return_sequences": 3,
-                    // "use_gpu": true
+                    "use_gpu": USE_GPU
                 }
             }),
             headers: headers
@@ -24,11 +24,15 @@ function fetchCodeCompletionText(prompt, API_KEY) {
             .then(res => res.json())
             .then(json => {
             if (Array.isArray(json)) {
-                const generations = Array();
+                const completions = Array();
                 for (let i = 0; i < json.length; i++) {
-                    generations.push(json[i].generated_text.trimStart());
-                    resolve({ generations });
+                    const completion = json[i].generated_text.trimStart();
+                    if (completion.trim() === "")
+                        continue;
+                    completions.push(completion);
                 }
+                console.log(completions);
+                resolve({ completions });
             }
             else {
                 console.log(json);
@@ -38,7 +42,7 @@ function fetchCodeCompletionText(prompt, API_KEY) {
             .catch(err => reject(err));
     });
 }
-exports.fetchCodeCompletionText = fetchCodeCompletionText;
+exports.fetchCodeCompletionTexts = fetchCodeCompletionTexts;
 // def incr_list(l: list):
 //     """Return list with elements incremented by 1.
 //     >>> incr_list([1, 2, 3])

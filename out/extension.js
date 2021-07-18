@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = void 0;
 const vscode = require("vscode");
 const config_1 = require("./config");
-const fetchCodeCompletion_1 = require("./utils/fetchCodeCompletion");
+const fetchCodeCompletions_1 = require("./utils/fetchCodeCompletions");
 function activate(context) {
     const disposable = vscode.commands.registerCommand('extension.copilot-clone-settings', () => {
         vscode.window.showInformationMessage('Show settings');
@@ -23,6 +23,7 @@ function activate(context) {
             // Grab the api key from the extension's config
             const configuration = vscode.workspace.getConfiguration('', document.uri);
             const API_KEY = configuration.get("conf.resource.hfAPIKey", "");
+            const USE_GPU = configuration.get("conf.resource.useGPU", "");
             const textBeforeCursor = document.getText();
             if (textBeforeCursor.trim() === "") {
                 return { items: [] };
@@ -33,7 +34,7 @@ function activate(context) {
                 let rs;
                 try {
                     // Fetch the code completion based on the text in the user's document
-                    rs = yield fetchCodeCompletion_1.fetchCodeCompletionText(textBeforeCursor, API_KEY);
+                    rs = yield fetchCodeCompletions_1.fetchCodeCompletionTexts(textBeforeCursor, API_KEY, USE_GPU);
                 }
                 catch (err) {
                     vscode.window.showErrorMessage(err.toString());
@@ -44,11 +45,13 @@ function activate(context) {
                 }
                 // Add the generated code to the inline suggestion list
                 const items = new Array();
-                items.push({
-                    text: rs.textContent,
-                    range: new vscode.Range(position.translate(0, rs.textContent.length), position),
-                    trackingId: `snippet-0`,
-                });
+                for (let i = 0; i < rs.completions.length; i++) {
+                    items.push({
+                        text: rs.completions[i],
+                        range: new vscode.Range(position.translate(0, rs.completions.length), position),
+                        trackingId: `snippet-${i}`,
+                    });
+                }
                 return { items };
             }
             return { items: [] };
