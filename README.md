@@ -42,6 +42,8 @@ Once VSCode Insider has opened up, you can press F5 to launch the extension in a
 
 
 
+
+
 **Note -**
 
 It can take a few seconds (~20seconds) to spin up the model on Huggingface's servers, so if you get an error about waiting for the model to load, just give it about 20 seconds and try again. If you don't see any suggestions, make sure that `showInlineCompletions` is enabled in your settings:
@@ -55,4 +57,5 @@ Additionally, Huggingface's Inference API free tier has a limited amount of requ
 
 ## 3. Limitations
 
-First and formost, this extension is a **prototype** and the model it was trained on is for **research purposes** only and should not be used for developing real world applications. This is because the default model that is used to generate the code suggestions was trained on a large set of data scraped from [GitHub]() that might have contained things such as vulnerable code or private information such as private keys or passwords. Vulnerable code or private information can and therefore probably will leak into the suggestions. Currently the suggestions are just limited to a few additional tokens since the model starts to [hallucinate]() variables and methods the longer suggestions it is allowed to generate. If you would like to read more about the shortcomings of the model used in the generation and data used to train the model please refer to this [model card]() and [datasheet]() that explain it more in-depth. If you would like to learn more about how the model was trained and data was collected please refer to this [repository](https://github.com/ncoop57/gpt-code-clippy/).
+| :exclamation:  **Important -**  First and formost, this extension is a **prototype** and the model it was trained on is for **research purposes** only and should not be used for developing real world applications. This is because the default model that is used to generate the code suggestions was trained on a large set of data scraped from [GitHub]() that might have contained things such as vulnerable code or private information such as private keys or passwords. Vulnerable code or private information can and therefore probably will leak into the suggestions. Currently the suggestions are just limited to a few additional tokens since the model starts to [hallucinate]() variables and methods the longer suggestions it is allowed to generate. If you would like to read more about the shortcomings of the model used in the generation and data used to train the model please refer to this [model card]() and [datasheet]() that explain it more in-depth. If you would like to learn more about how the model was trained and data was collected please refer to this [repository](https://github.com/ncoop57/gpt-code-clippy/). |
+|-----------------------------------------|
