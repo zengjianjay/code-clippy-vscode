@@ -46,7 +46,7 @@ It can take a few seconds (~20seconds) to spin up the model on Huggingface's ser
 
 Additionally, Huggingface's Inference API free tier has a limited amount of requests you can make per hour and per month so if you are on the free tier you will only be able to use the extension as a demo. If you would like to be able to use the extension without this limitation you can host the model yourself and edit the code to send requests there or you can upgrade your Huggingface account to a different [tier](https://huggingface.co/pricing).
 
-You can also edit the model used to generate the code suggestions. I recommend using EleutherAI/gpt-neo-1.3B or EleutherAI/gpt-neo-2.7B over the default as in my testing they produce a lot better suggestions, but is significantly slower. To edit the model press CTRL + SHIFT + P to bring up the command prompt and type settings and select "Preferences: Open User Settings". This will open another tap with your settings. Search for "code clippy" and update the "Hf Model Name" configuration to be whatever model you want such as:
+You can also edit the model used to generate the code suggestions. I recommend using EleutherAI/gpt-neo-1.3B or EleutherAI/gpt-neo-2.7B over the default as in my testing they produce a lot better suggestions, but is significantly slower. To edit the model press `CTRL + SHIFT + P` to bring up the command prompt and type settings and select "Preferences: Open User Settings". This will open another tap with your settings. Search for "code clippy" and update the "Hf Model Name" configuration to be whatever model you want such as:
 ```
 EleutherAI/gpt-neo-1.3B
 ```
