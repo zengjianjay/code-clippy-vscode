@@ -15,7 +15,7 @@ function fetchCodeCompletionTexts(prompt, fileName, MODEL_NAME, API_KEY, USE_GPU
             body: JSON.stringify({
                 "inputs": prompt, "parameters": {
                     "max_new_tokens": 16, "return_full_text": false,
-                    "do_sample": true, "temperature": 0.8,
+                    "do_sample": true, "temperature": 0.8, "top_p": 0.95,
                     "max_time": 10.0, "num_return_sequences": 3,
                     "use_gpu": USE_GPU
                 }
