@@ -1,86 +1,58 @@
-![Captain Stack](./logo.svg)
+# Code Clippy — Inline code suggestions from your friendly neighborhood hacker Clippy for VSCode
 
-# Captain Stack — Code suggestion for VSCode
+<p align="center">
+    <br>
+    <img src="https://raw.githubusercontent.com/ncoop57/gpt-code-clippy/camera-ready/code_clippy_logo.jpg" width="256"/>
+    <br>
+    Courtesy of the awesome Aimee Trevett!
+<p>
 
+This extension is an effort to create an open source version of [Github Copilot](https://copilot.github.com/) where both the extension, model, and data that the model was trained on is free for everyone to use. If you'd like to learn more about how the model power Code Clippy, check out this [repo](https://github.com/ncoop57/gpt-code-clippy/).
 
-This feature is somewhat similar to [Github Copilot](https://copilot.github.com/)'s code suggestion. But instead of using AI, it sends your search query to Google, then retrieves StackOverflow answers and autocompletes them for you. 
-
-Have questions? [Join our Discord server](https://discord.gg/5F5tDsWFmp) [![Discord Chat](https://img.shields.io/discord/864164585070526475.svg)](https://discord.gg/5F5tDsWFmp)  
-
----
-
-[<img src="https://raw.githubusercontent.com/hieunc229/asssets/master/cs-header.svg" alt="Inverr"/>](https://inverr.com/)
-
-[Need to build website? Use Inverr](https://inverr.com/?ref=github-filepond) / [Dev updates on Twitter](https://twitter.com/hieuSSR/)
-
----
+This extension also sits completely atop this other clone of Github Copilot aptly named [Captain Stack](https://github.com/hieunc229/copilot-clone), since instead of synthesizing the answers using deep learning, it extractions them from StackOverflow posts.
 
 
-![Demo Video](./demo.gif)
+<!-- ![Demo Video](./demo.gif) -->
 
 ## Table of contents:
 
-1. [Installation](#1-installation)
-2. [Play with Captain Stack](#2-play-with-captain-stack)
-3. [Notes](#3-notes)
-4. [Changelog](#4-changelog)
-
-
-_Note: ⚠️ This extension uses a proposed API (inline-completion) and can only be used for extension development in [VSCode Insider release](https://code.visualstudio.com/insiders/). It's not yet available on VSCode_
+1. [How to Install](#1-installation)
+2. [Using Code Clippy](#2-play-with-captain-stack)
+3. [Limitations](#3-limitations)
 
 ---
 
-## 1. Installation
+## 1. How to Install
 
-**Check out the installation video: https://youtu.be/MD-kzsF0Scg**
+In order to use the extension, you will need to download and install [VSCode Insider](https://code.visualstudio.com/insiders/) and [Node and npm](https://nodejs.dev/learn/how-to-install-nodejs) (tested on Node `10.19.0` and npm `7.13.0`). Additionally, you will need a [Huggingface account](https://huggingface.co/join) in order to obtain the necessary API key that is used to authorize calls to Huggingface's Inference API.
 
-Before installation, make sure you have [VSCode Insider](https://code.visualstudio.com/insiders/). You'll be using this version. To install and starting Captain Stack:
-
-1. Download this repository to your local machine. Unzip and open it on VSCode Insider (make sure the root directory is the same as `package.json` file)
-2. (optional) Run `npm install` in the terminal to install dependencies. _A `postinstall` script would download the latest version of `vscode.proposed.d.ts`_
-3. Run the `Run Extension` target in the Debug View. Or from the top menu, choose `Run > Start Debugging`.
-
-This will:
-- Start a task `npm: watch` to compile the code and watch for changes
-- Open a new VSCode window (you should use the extension here)
-
-_Note: When you make changes, you should refresh that window to apply changes. To refresh, open Command Palette (Command+Shift+P on MacOS, or Ctrl+Shift+P on Windows), then choose "Developer: Reload window"_
-
----
-
-## 2. Play with Captain Stack
-
-To trigger inline completion, you'll need to type `//find {your keyword}.` (start with `//find`, end with a dot `.`)
-
-For example
-```js
-//find binary search in javascript.
+Download and install Code Clippy:
+```bash
+git clone https://github.com/ncoop57/code-clippy-vscode
+cd code-clippy-vscode
+npm install
+code-insiders .
 ```
 
-Make sure that `showInlineCompletions` is enabled in your settings!
+---
+
+## 2. Using Code Clippy
+
+Once VSCode Insider has opened up, you can press F5 to launch the extension in another VSCode window in debug model that you can test out. Open up a file of your choice in the new VSCode window and start typing. You will be prompted to enter an API key, go to your Huggingface account's [API token page](https://huggingface.co/settings/token) and copy your API key and paste it into the prompt. Now you should be able to type and see suggestions! To accept a suggestion, just press tab and to cycle through different suggestions press `ALT + [` to go to the next suggestion or `ALT + ]` to go to the previous one.
+
+
+
+**Note -**
+
+It can take a few seconds (~20seconds) to spin up the model on Huggingface's servers, so if you get an error about waiting for the model to load, just give it about 20 seconds and try again. If you don't see any suggestions, make sure that `showInlineCompletions` is enabled in your settings:
 ```
 "editor.inlineSuggest.enabled": true
 ```
 
+Additionally, Huggingface's Inference API free tier has a limited amount of requests you can make per hour and per month so if you are on the free tier you will only be able to use the extension as a demo. If you would like to be able to use the extension without this limitation you can host the model yourself and edit the code to send requests there or you can upgrade your Huggingface account to a different [tier](https://huggingface.co/pricing).
+
 ---
 
-## 3. Notes
+## 3. Limitations
 
-- There are more code sources that should be considered besides StackOverflow
-- If you see `unsupported` error message, ignore it
-
-**Limits:**
-- The extension uses fetch-node to get page content, and I don't know if there is any fetching limit
-- The extension uses querySelector to extract code and other info. There is a risk of either StackOverflow or Google changing its querySelector
-
-If those factor became problems, the extension could be using their official APIs instead.
-
-
-
-## 4. Changelog
-
-- Jul 14, 2021 - Adapted to VS Code Insiders Release Version 1.59
-- Jul 01, 2021 - Added snippet source (thanks for [mechero's suggestion](https://news.ycombinator.com/item?id=27698687))
-- Jun 30, 2021 - Publish the initial version
-
-**Feel free to open a thread for feedback or discussion. And have fun!**
+First and formost, this extension is a **prototype** and the model it was trained on is for **research purposes** only and should not be used for developing real world applications. This is because the default model that is used to generate the code suggestions was trained on a large set of data scraped from [GitHub]() that might have contained things such as vulnerable code or private information such as private keys or passwords. Vulnerable code or private information can and therefore probably will leak into the suggestions. Currently the suggestions are just limited to a few additional tokens since the model starts to [hallucinate]() variables and methods the longer suggestions it is allowed to generate. If you would like to read more about the shortcomings of the model used in the generation and data used to train the model please refer to this [model card]() and [datasheet]() that explain it more in-depth. If you would like to learn more about how the model was trained and data was collected please refer to this [repository](https://github.com/ncoop57/gpt-code-clippy/).
