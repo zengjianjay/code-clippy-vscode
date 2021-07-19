@@ -9,10 +9,7 @@
 
 This extension is an effort to create an open source version of [Github Copilot](https://copilot.github.com/) where both the extension, model, and data that the model was trained on is free for everyone to use. If you'd like to learn more about how the model power Code Clippy, check out this [repo](https://github.com/ncoop57/gpt-code-clippy/).
 
-This extension also sits completely atop this other clone of Github Copilot aptly named [Captain Stack](https://github.com/hieunc229/copilot-clone), since instead of synthesizing the answers using deep learning, it extractions them from StackOverflow posts.
-
-
-<!-- ![Demo Video](./demo.gif) -->
+This extension also sits completely atop this other clone of Github Copilot aptly named [Captain Stack](https://github.com/hieunc229/copilot-clone), since instead of synthesizing the answers using deep learning, it extracts them from StackOverflow posts.
 
 ## Table of contents:
 
@@ -40,10 +37,6 @@ code-insiders .
 
 Once VSCode Insider has opened up, you can press F5 to launch the extension in another VSCode window in debug model that you can test out. Open up a file of your choice in the new VSCode window and start typing. You will be prompted to enter an API key, go to your Huggingface account's [API token page](https://huggingface.co/settings/token) and copy your API key and paste it into the prompt. Now you should be able to type and see suggestions! To accept a suggestion, just press tab and to cycle through different suggestions press `ALT + [` to go to the next suggestion or `ALT + ]` to go to the previous one.
 
-
-
-
-
 **Note -**
 
 It can take a few seconds (~20seconds) to spin up the model on Huggingface's servers, so if you get an error about waiting for the model to load, just give it about 20 seconds and try again. If you don't see any suggestions, make sure that `showInlineCompletions` is enabled in your settings:
@@ -52,6 +45,13 @@ It can take a few seconds (~20seconds) to spin up the model on Huggingface's ser
 ```
 
 Additionally, Huggingface's Inference API free tier has a limited amount of requests you can make per hour and per month so if you are on the free tier you will only be able to use the extension as a demo. If you would like to be able to use the extension without this limitation you can host the model yourself and edit the code to send requests there or you can upgrade your Huggingface account to a different [tier](https://huggingface.co/pricing).
+
+You can also edit the model used to generate the code suggestions. I recommend using EleutherAI/gpt-neo-1.3B or EleutherAI/gpt-neo-2.7B over the default as in my testing they produce a lot better suggestions, but is significantly slower. To edit the model press CTRL + SHIFT + P to bring up the command prompt and type settings and select "Preferences: Open User Settings". This will open another tap with your settings. Search for "code clippy" and update the "Hf Model Name" configuration to be whatever model you want such as:
+```
+EleutherAI/gpt-neo-1.3B
+```
+
+From these code clippy settings, you can also update your API key or enable using GPU for doing the generation. However, for this feature to work, you need to have at least the Startup tier for Huggingface's Inference API.
 
 ---
 

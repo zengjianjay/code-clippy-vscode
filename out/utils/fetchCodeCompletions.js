@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchCodeCompletionTexts = void 0;
 const node_fetch_1 = require("node-fetch");
-function fetchCodeCompletionTexts(prompt, MODEL_NAME, API_KEY, USE_GPU) {
+function fetchCodeCompletionTexts(prompt, fileName, MODEL_NAME, API_KEY, USE_GPU) {
     console.log(MODEL_NAME);
     const API_URL = `https://api-inference.huggingface.co/models/${MODEL_NAME}`;
     // Setup header with API key
@@ -16,7 +16,7 @@ function fetchCodeCompletionTexts(prompt, MODEL_NAME, API_KEY, USE_GPU) {
                 "inputs": prompt, "parameters": {
                     "max_new_tokens": 16, "return_full_text": false,
                     "do_sample": true, "temperature": 0.8,
-                    "max_time": 5.0, "num_return_sequences": 3,
+                    "max_time": 10.0, "num_return_sequences": 3,
                     "use_gpu": USE_GPU
                 }
             }),

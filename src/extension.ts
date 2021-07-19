@@ -24,6 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const API_KEY = configuration.get("conf.resource.hfAPIKey", "");
 			const USE_GPU = configuration.get("conf.resource.useGPU", false);
 
+			vscode.comments.createCommentController
 			const textBeforeCursor = document.getText()
 			if (textBeforeCursor.trim() === "") {
 				return { items: [] };
@@ -38,7 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 				try {
 					// Fetch the code completion based on the text in the user's document
-					rs = await fetchCodeCompletionTexts(textBeforeCursor, MODEL_NAME, API_KEY, USE_GPU);
+					rs = await fetchCodeCompletionTexts(textBeforeCursor, document.fileName, MODEL_NAME, API_KEY, USE_GPU);
 				} catch (err) {
 
 					// Check if it is an issue with API token and if so prompt user to enter a correct one

@@ -4,7 +4,7 @@ export type FetchCodeCompletions = {
     completions: Array<string>
 }
 
-export function fetchCodeCompletionTexts(prompt: string, MODEL_NAME: string, API_KEY: string, USE_GPU: boolean): Promise<FetchCodeCompletions> {
+export function fetchCodeCompletionTexts(prompt: string, fileName: string, MODEL_NAME: string, API_KEY: string, USE_GPU: boolean): Promise<FetchCodeCompletions> {
     console.log(MODEL_NAME)
     const API_URL = `https://api-inference.huggingface.co/models/${MODEL_NAME}`;
     // Setup header with API key
@@ -18,7 +18,7 @@ export function fetchCodeCompletionTexts(prompt: string, MODEL_NAME: string, API
                 "inputs": prompt, "parameters": {
                     "max_new_tokens": 16, "return_full_text": false,
                     "do_sample": true, "temperature": 0.8,
-                    "max_time": 5.0, "num_return_sequences": 3,
+                    "max_time": 10.0, "num_return_sequences": 3,
                     "use_gpu": USE_GPU
                 }
             }),
