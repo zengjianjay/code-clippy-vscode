@@ -4,7 +4,7 @@ import { fetchCodeCompletionTexts } from './utils/fetchCodeCompletions';
 
 export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand(
-		'extension.copilot-clone-settings',
+		'extension.code-clippy-settings',
 		() => {
 			vscode.window.showInformationMessage('Show settings');
 		}
