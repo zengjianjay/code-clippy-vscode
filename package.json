@@ -39,7 +39,7 @@
 			"properties": {
 				"conf.resource.hfModelName": {
 					"type": "string",
-					"default": "flax-community/gpt-neo-125M-code-clippy-dedup-filtered-no-resize-2048bs",
+					"default": "EleutherAI/gpt-neo-2.7B",
 					"description": "Model name that will be used to generate the completions.",
 					"scope": "resource"
 				},
