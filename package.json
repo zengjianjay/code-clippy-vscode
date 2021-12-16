@@ -1,5 +1,7 @@
 {
-	"enableProposedApi": true,
+	"enabledApiProposals": [
+		"inlineCompletions"
+	],
 	"name": "code-clippy",
 	"displayName": "Code Clippy",
 	"description": "Your friendly neighborhood Clippy, ready to help you with all your code needs :D!",
