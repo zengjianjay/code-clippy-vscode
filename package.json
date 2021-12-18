@@ -1,5 +1,7 @@
 {
-	"enableProposedApi": true,
+	"enabledApiProposals": [
+		"inlineCompletions"
+	],
 	"name": "code-clippy",
 	"displayName": "Code Clippy",
 	"description": "Your friendly neighborhood Clippy, ready to help you with all your code needs :D!",
@@ -37,7 +39,7 @@
 			"properties": {
 				"conf.resource.hfModelName": {
 					"type": "string",
-					"default": "flax-community/gpt-neo-125M-code-clippy-dedup-filtered-no-resize-2048bs",
+					"default": "EleutherAI/gpt-neo-2.7B",
 					"description": "Model name that will be used to generate the completions.",
 					"scope": "resource"
 				},
