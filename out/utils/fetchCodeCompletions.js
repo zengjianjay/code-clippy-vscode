@@ -10,7 +10,7 @@ function fetchCodeCompletionTexts(prompt, fileName, MODEL_NAME, API_KEY, USE_GPU
     const headers = { "Authorization": `Bearer ${API_KEY}` };
     return new Promise((resolve, reject) => {
         // Send post request to inference API
-        return node_fetch_1.default(API_URL, {
+        return (0, node_fetch_1.default)(API_URL, {
             method: "post",
             body: JSON.stringify({
                 "inputs": prompt, "parameters": {
