@@ -11,6 +11,14 @@ This extension is an effort to create an open source version of [Github Copilot]
 
 This extension also sits completely atop this other clone of Github Copilot aptly named [Captain Stack](https://github.com/hieunc229/copilot-clone), since instead of synthesizing the answers using deep learning, it extracts them from StackOverflow posts.
 
+## Demo
+
+<p align="center">
+    <br>
+    <img src="code-clippy-demo.gif" width="80%"/>
+    </br>
+<p>
+
 ## Table of contents:
 
 1. [How to Install](#1-installation)
