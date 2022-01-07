@@ -33,7 +33,7 @@ In order to use the extension, you will need to download and install [VSCode Ins
 
 Download and install Code Clippy:
 ```bash
-git clone https://github.com/ncoop57/code-clippy-vscode
+git clone https://github.com/CodedotAl/code-clippy-vscode
 cd code-clippy-vscode
 npm install
 code-insiders .
