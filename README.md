@@ -43,7 +43,7 @@ code-insiders .
 
 ## 2. Using Code Clippy
 
-Once VSCode Insider has opened up, you can press F5 to launch the extension in another VSCode window in debug model that you can test out. Open up a file of your choice in the new VSCode window and start typing. You will be prompted to enter an API key, go to your Huggingface account's [API token page](https://huggingface.co/settings/token) and copy your API key and paste it into the prompt. Now you should be able to type and see suggestions! To accept a suggestion, just press tab and to cycle through different suggestions press `ALT + [` to go to the next suggestion or `ALT + ]` to go to the previous one.
+Once VSCode Insider has opened up, you can press F5 to launch the extension in another VSCode window in debug model that you can test out. Open up a file of your choice in the new VSCode window and start typing. You will be prompted to enter an API key, go to your Huggingface account's [API token page](https://api-inference.huggingface.co/dashboard/api_token) and copy your API key and paste it into the prompt. Now you should be able to type and see suggestions! To accept a suggestion, just press tab and to cycle through different suggestions press `ALT + [` to go to the next suggestion or `ALT + ]` to go to the previous one.
 
 **Note -**
 
