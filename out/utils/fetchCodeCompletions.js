@@ -19,11 +19,7 @@ function fetchCodeCompletionTexts(prompt, API_URL) {
         const res = yield (0, node_fetch_1.default)(API_URL, {
             method: "post",
             body: JSON.stringify({
-                "inputs": prompt, "parameters": {
-                    "max_new_tokens": 16, "return_full_text": false,
-                    "do_sample": true, "temperature": 0.8, "top_p": 0.95,
-                    "max_time": 10.0, "num_return_sequences": 3,
-                }
+                "inputs": prompt
             }),
             headers: headers
         });

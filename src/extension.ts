@@ -18,11 +18,26 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable)
 
+
+	function sleep(ms: number) {
+		return new Promise(resolve => setTimeout(resolve, ms))
+	}
+
+	let lastRequest = null
+
 	const provider: vscode.InlineCompletionItemProvider<vscode.InlineCompletionItem> = {
 		provideInlineCompletionItems: async (document, position, context, token) => {
 			// Grab the api key from the extension's config
 			const configuration = vscode.workspace.getConfiguration('', document.uri)
 			const API_KEY = configuration.get("conf.resource.codegen", "http://localhost:8000/api/codegen")
+
+			// on request last change
+			let requestId = new Date().getTime()
+			lastRequest = requestId
+			await sleep(1000)
+			if (lastRequest !== requestId) {
+				return { items: [] }
+			}
 
 			vscode.comments.createCommentController
 			const textBeforeCursor = document.getText()

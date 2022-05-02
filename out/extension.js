@@ -22,11 +22,22 @@ function activate(context) {
         vscode.window.showInformationMessage('Show settings');
     });
     context.subscriptions.push(disposable);
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    let lastRequest = null;
     const provider = {
         provideInlineCompletionItems: (document, position, context, token) => __awaiter(this, void 0, void 0, function* () {
             // Grab the api key from the extension's config
             const configuration = vscode.workspace.getConfiguration('', document.uri);
             const API_KEY = configuration.get("conf.resource.codegen", "http://localhost:8000/api/codegen");
+            // on request last change
+            let requestId = new Date().getTime();
+            lastRequest = requestId;
+            yield sleep(1000);
+            if (lastRequest !== requestId) {
+                return { items: [] };
+            }
             vscode.comments.createCommentController;
             const textBeforeCursor = document.getText();
             if (textBeforeCursor.trim() === "") {

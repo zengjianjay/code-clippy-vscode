@@ -5,7 +5,7 @@
 	"name": "codegen",
 	"displayName": "Code Gen",
 	"description": "Your friendly neighborhood Clippy, ready to help you with all your code needs :D!",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"publisher": "qhduan",
 	"icon": "code_clippy_logo.jpg",
 	"repository": "https://github.com/qhduan/code-clippy-vscode/",
