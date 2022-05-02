@@ -2,13 +2,13 @@
 	"enabledApiProposals": [
 		"inlineCompletions"
 	],
-	"name": "code-clippy",
-	"displayName": "Code Clippy",
+	"name": "codegen",
+	"displayName": "Code Gen",
 	"description": "Your friendly neighborhood Clippy, ready to help you with all your code needs :D!",
 	"version": "0.0.1",
-	"publisher": "ncoop57",
+	"publisher": "qhduan",
 	"icon": "code_clippy_logo.jpg",
-	"repository": "https://github.com/ncoop57/gpt-code-clippy/",
+	"repository": "https://github.com/qhduan/code-clippy-vscode/",
 	"engines": {
 		"vscode": "^1.34.0"
 	},
@@ -17,42 +17,30 @@
 		"Other"
 	],
 	"activationEvents": [
-		"*"
+		"onLanguage:python"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.code-clippy-settings",
+				"command": "extension.codegen-settings",
 				"title": "Code Clippy Settings"
 			}
 		],
 		"menus": {
 			"editor/inlineCompletions/actions": [
 				{
-					"command": "extension.code-clippy-settings"
+					"command": "extension.codegen-settings"
 				}
 			]
 		},
 		"configuration": {
 			"title": "Code Clippy Configuration",
 			"properties": {
-				"conf.resource.hfModelName": {
+				"conf.resource.codegen": {
 					"type": "string",
-					"default": "flax-community/gpt-neo-125M-code-clippy-dedup-2048",
-					"description": "Model name that will be used to generate the completions.",
-					"scope": "resource"
-				},
-				"conf.resource.hfAPIKey": {
-					"type": "string",
-					"default": "<API_KEY>",
-					"description": "API key for using Huggingface's Inference API: https://api-inference.huggingface.co/docs/node/html/quicktour.html",
-					"scope": "resource"
-				},
-				"conf.resource.useGPU": {
-					"type": "boolean",
-					"default": false,
-					"description": "Whether to use GPU for faster completions. Must have Startup plan at a minimum.",
+					"default": "http://localhost:8000/api/codegen",
+					"description": "Model api address.",
 					"scope": "resource"
 				}
 			}

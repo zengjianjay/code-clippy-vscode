@@ -1,84 +1,71 @@
-import * as vscode from 'vscode';
-import CSConfig from './config';
-import { fetchCodeCompletionTexts } from './utils/fetchCodeCompletions';
+import * as vscode from 'vscode'
+import CSConfig from './config'
+import { fetchCodeCompletionTexts } from './utils/fetchCodeCompletions'
+
+// QHD: some code refer to
+// https://github.com/kirillpanfile/ai-autocomplete/blob/cf2de2f4a32a0aee77d040364507eeef4349838c/src/extension.js
+
+// Make an output channel for debug
+const print = vscode.window.createOutputChannel("codegen")
 
 export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand(
-		'extension.code-clippy-settings',
+		'extension.codegen-settings',
 		() => {
-			vscode.window.showInformationMessage('Show settings');
+			vscode.window.showInformationMessage('Show settings')
 		}
-	);
+	)
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(disposable)
 
-	interface CustomInlineCompletionItem extends vscode.InlineCompletionItem {
-		trackingId: string;
-	}
-
-	const provider: vscode.InlineCompletionItemProvider<CustomInlineCompletionItem> = {
+	const provider: vscode.InlineCompletionItemProvider<vscode.InlineCompletionItem> = {
 		provideInlineCompletionItems: async (document, position, context, token) => {
 			// Grab the api key from the extension's config
-			const configuration = vscode.workspace.getConfiguration('', document.uri);
-			const MODEL_NAME = configuration.get("conf.resource.hfModelName", "");
-			const API_KEY = configuration.get("conf.resource.hfAPIKey", "");
-			const USE_GPU = configuration.get("conf.resource.useGPU", false);
+			const configuration = vscode.workspace.getConfiguration('', document.uri)
+			const API_KEY = configuration.get("conf.resource.codegen", "http://localhost:8000/api/codegen")
 
 			vscode.comments.createCommentController
 			const textBeforeCursor = document.getText()
 			if (textBeforeCursor.trim() === "") {
-				return { items: [] };
+				return { items: [] }
 			}
+
 			const currLineBeforeCursor = document.getText(
 				new vscode.Range(position.with(undefined, 0), position)
-			);
+			)
 
 			// Check if user's state meets one of the trigger criteria
 			if (CSConfig.SEARCH_PHARSE_END.includes(textBeforeCursor[textBeforeCursor.length - 1]) || currLineBeforeCursor.trim() === "") {
-				let rs;
+				let rs = null
 
 				try {
 					// Fetch the code completion based on the text in the user's document
-					rs = await fetchCodeCompletionTexts(textBeforeCursor, document.fileName, MODEL_NAME, API_KEY, USE_GPU);
+					rs = await fetchCodeCompletionTexts(textBeforeCursor, API_KEY)
 				} catch (err) {
-
                     if (err instanceof Error) {
-                        // Check if it is an issue with API token and if so prompt user to enter a correct one
-                        if (err.toString() === "Error: Bearer token is invalid" || err.toString() === "Error: Authorization header is invalid, use 'Bearer API_TOKEN'") {
-                            vscode.window.showInputBox(
-                                {"prompt": "Please enter your HF API key in order to use Code Clippy", "password": true}
-                            ).then(apiKey => configuration.update("conf.resource.hfAPIKey", apiKey))
-
-                        }
-                        vscode.window.showErrorMessage(err.toString());
+                        vscode.window.showErrorMessage(err.toString())
                     }
-					return { items:[] };
+					return { items:[] }
 				}
 
-
-				if (rs == null) {
-					return { items: [] };
+				if (!rs) {
+					return { items: [] }
 				}
 
 				// Add the generated code to the inline suggestion list
-				const items = new Array<CustomInlineCompletionItem>();
-				for (let i=0; i < rs.completions.length; i++) {
+				const items = new Array<vscode.InlineCompletionItem>()
+				for (const text of rs.completions) {
 					items.push({
-						text: rs.completions[i],
-						range: new vscode.Range(position.translate(0, rs.completions.length), position),
-						trackingId: `snippet-${i}`,
-					});
+						text,
+						range: new vscode.Range(position.translate(0, text.length), position),
+					})
 				}
-				return { items };
+				print.appendLine(JSON.stringify(items))
+				return { items }
 			}
-			return { items: [] };
+			return { items: [] }
 		},
-	};
+	}
 
-	vscode.languages.registerInlineCompletionItemProvider({ pattern: "**" }, provider);
-
-	// Be aware that the API around `getInlineCompletionItemController` will not be finalized as is!
-	vscode.window.getInlineCompletionItemController(provider).onDidShowCompletionItem(e => {
-		const id = e.completionItem.trackingId;
-	});
+	vscode.languages.registerInlineCompletionItemProvider({ pattern: "**" }, provider)
 }
