@@ -18,27 +18,32 @@ const fetchCodeCompletions_1 = require("./utils/fetchCodeCompletions");
 // Make an output channel for debug
 const print = vscode.window.createOutputChannel("codegen");
 function activate(context) {
+    console.log("code gen plugin is actived1.");
     const disposable = vscode.commands.registerCommand('extension.codegen-settings', () => {
         vscode.window.showInformationMessage('Show settings');
     });
+    console.log("code gen plugin is actived2.");
     context.subscriptions.push(disposable);
+    console.log("code gen plugin is actived3.");
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
     let lastRequest = null;
     const provider = {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         provideInlineCompletionItems: (document, position, context, token) => __awaiter(this, void 0, void 0, function* () {
+            console.log("code gen plugin is actived4.");
             // Grab the api key from the extension's config
-            const configuration = vscode.workspace.getConfiguration('', document.uri);
-            const API_KEY = configuration.get("conf.resource.codegen", "http://localhost:8000/api/codegen");
+            const API_URL = "http://9.91.8.235:8081/api";
             // on request last change
-            let requestId = new Date().getTime();
+            const requestId = new Date().getTime();
             lastRequest = requestId;
             yield sleep(1000);
             if (lastRequest !== requestId) {
                 return { items: [] };
             }
-            vscode.comments.createCommentController;
+            // vscode.comments.createCommentController;
             const textBeforeCursor = document.getText();
             if (textBeforeCursor.trim() === "") {
                 return { items: [] };
@@ -49,7 +54,7 @@ function activate(context) {
                 let rs = null;
                 try {
                     // Fetch the code completion based on the text in the user's document
-                    rs = yield (0, fetchCodeCompletions_1.fetchCodeCompletionTexts)(textBeforeCursor, API_KEY);
+                    rs = yield (0, fetchCodeCompletions_1.fetchCodeCompletionTexts)(textBeforeCursor, API_URL);
                 }
                 catch (err) {
                     if (err instanceof Error) {
@@ -63,10 +68,8 @@ function activate(context) {
                 // Add the generated code to the inline suggestion list
                 const items = new Array();
                 for (const text of rs.completions) {
-                    items.push({
-                        text,
-                        range: new vscode.Range(position.translate(0, text.length), position),
-                    });
+                    const item = new vscode.InlineCompletionItem(text, new vscode.Range(position.translate(0, text.length), position));
+                    items.push(item);
                 }
                 print.appendLine(JSON.stringify(items));
                 return { items };

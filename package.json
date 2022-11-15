@@ -67,6 +67,6 @@
 	"dependencies": {
 		"@types/jsdom": "^16.2.12",
 		"jsdom": "^16.6.0",
-		"node-fetch": "^2.6.1"
+		"axios": "^0.27.0"
 	}
 }
