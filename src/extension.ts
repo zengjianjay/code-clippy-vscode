@@ -30,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		provideInlineCompletionItems: async (document, position, context, token) => {
-			console.log("code gen plugin is actived4.");
+			console.log("code gen plugin is actived.");
 			// Grab the api key from the extension's config
 			const API_URL = "http://9.91.8.235:8081/api";
 

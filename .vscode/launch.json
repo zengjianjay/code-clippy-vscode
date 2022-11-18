@@ -12,7 +12,7 @@
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
-				"--enable-proposed-api qhduan.codegen"
+				"--enable-proposed-api codespaces.codegen"
 			],
 			"outFiles": [
 				"${workspaceFolder}/out/**/*.js"
